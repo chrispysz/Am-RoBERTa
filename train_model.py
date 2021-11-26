@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score, roc_curve
 
 
-tokenizer = RobertaTokenizerFast.from_pretrained("./Am-RoBERTa/tokenizer", max_len=512)
+tokenizer = RobertaTokenizerFast.from_pretrained("./tokenizer", max_len=512)
 data_fold_nr = '1'
 
 
