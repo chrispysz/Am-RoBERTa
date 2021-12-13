@@ -8,7 +8,7 @@ with open("./data/f0/red_full.txt", 'r', encoding="utf8") as in_f:
 
         for line in split_filedata:
             if line.startswith('>'):
-                label_lines+=1
+                label_lines += 1
 
             if label_lines == 2 and not line.startswith('>'):
                 out_f.write(line + '\n')

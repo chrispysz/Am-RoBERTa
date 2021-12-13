@@ -3,10 +3,11 @@ from transformers import RobertaTokenizerFast, RobertaConfig, RobertaForSequence
 import torch
 from torch.utils.data import Dataset
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score, roc_curve
+import numpy as np
 
 
 tokenizer = RobertaTokenizerFast.from_pretrained("./tokenizer", max_len=512)
-data_fold_nr = '1'
+data_fold_nr = '4'
 
 
 train_sequences = []
@@ -17,7 +18,7 @@ test_sequences = []
 test_labels = []
 
 # open file in read mode
-with open('./data/f'+data_fold_nr+'/trn_prepared_shuffled.csv', 'r') as read_obj:
+with open('./data/variable_length_proberta/f'+data_fold_nr+'/trn_prepared_shuffled.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     for row in csv_reader:
         if ('0' in row[1]):
@@ -26,7 +27,7 @@ with open('./data/f'+data_fold_nr+'/trn_prepared_shuffled.csv', 'r') as read_obj
             train_labels.append(1)
         train_sequences.append(row[0])
 
-with open('./data/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
+with open('./data/variable_length_proberta/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     for row in csv_reader:
         if ('0' in row[1]):
@@ -35,7 +36,7 @@ with open('./data/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj
             eval_labels.append(1)
         eval_sequences.append(row[0])
 
-with open('./data/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
+with open('./data/variable_length_proberta/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     for row in csv_reader:
         if ('0' in row[1]):
@@ -83,12 +84,15 @@ model = RobertaForSequenceClassification(config=config)
 training_args = TrainingArguments(
     output_dir="./Am-RoBERTa/m_f"+data_fold_nr,
     overwrite_output_dir=True,
-    num_train_epochs=3,
-    per_gpu_train_batch_size=8,
-    save_steps=4_000,
-    save_total_limit=5,
+    num_train_epochs=2,
+    per_device_train_batch_size=32,
+    per_device_eval_batch_size=32,
+    save_strategy='epoch',
+    #logging_strategy="epoch",
     logging_steps=100,
+    logging_first_step=True,
     evaluation_strategy="steps",
+    eval_steps=100
 )
 
 

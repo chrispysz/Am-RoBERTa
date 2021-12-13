@@ -1,6 +1,6 @@
 import pandas as pd
 
-data_fold = 'f24'
+data_fold = 'variable_length_pdbfull/f6'
 
 
 def clean_and_mark(data_id, data_type, data_fold):
@@ -21,8 +21,6 @@ def clean_and_mark(data_id, data_type, data_fold):
             i = 0
             for line in split_filedata:
                 i += 1
-                if(i % int((len(split_filedata)/5)) == 0):
-                    print(str(i)+'/'+str(len(split_filedata)))
                 if(line != '' and not ">" in line):
                     if (data_id == 'neg'):
                         line = line + ',0'
@@ -37,7 +35,7 @@ def clean_and_mark(data_id, data_type, data_fold):
 
 clean_and_mark('neg', 'trn', data_fold)
 clean_and_mark('neg', 'val', data_fold)
-clean_and_mark('neg', 'tst', data_fold)
-clean_and_mark('hets', 'trn', data_fold)
-clean_and_mark('hets', 'val', data_fold)
-clean_and_mark('hets', 'tst', data_fold)
+#clean_and_mark('neg', 'tst', data_fold)
+#clean_and_mark('bass', 'trn', data_fold)
+#clean_and_mark('bass', 'val', data_fold)
+#clean_and_mark('hets', 'tst', data_fold)
