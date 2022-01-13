@@ -57,11 +57,7 @@ def run(data_fold_nr, data_name, eval_data_name):
 
     train_encodings = tokenizer(train_sequences, truncation=True, padding=True)
     eval_encodings = tokenizer(eval_sequences, truncation=True, padding=True)
-    test_encodings = tokenizer(test_sequences, truncation=True, padding=True, 
-    max_length=40, stride=32, return_overflowing_tokens=True, return_offsets_mapping=True)
-    print(eval_encodings[0])
-    print(test_encodings[0])
-
+    test_encodings = tokenizer(test_sequences, truncation=True, padding=True)
 
     class AmDataset(Dataset):
         def __init__(self, encodings, labels):
@@ -82,8 +78,6 @@ def run(data_fold_nr, data_name, eval_data_name):
     eval_dataset = AmDataset(eval_encodings, eval_labels)
     test_dataset = AmDataset(test_encodings, test_labels)
 
-    print(len(test_encodings))
-    print(len(test_labels))
 
 
     model = RobertaForSequenceClassification(config=config)
@@ -130,7 +124,7 @@ def run(data_fold_nr, data_name, eval_data_name):
         compute_metrics=compute_metrics
     )
     with open("./data/misc/current_eval.txt", 'a') as out_f:
-        out_f.write(data_name+'-'+eval_data_name + data_fold_nr + '\n' + str(trainer.evaluate(test_dataset))+'\n')
+        out_f.write(data_name+'-'+eval_data_name + data_fold_nr + '\n' + str(trainer.evaluate(eval_dataset))+'\n')
 
-#for x in range(1, 7):
-run(str(1), 'NLReff_for_PRoBERTa', 'PRoBERTa')
+for x in range(1, 7):
+    run(str(x), 'DisProt', 'PRoBERTa')

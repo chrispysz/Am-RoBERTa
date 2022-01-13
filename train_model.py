@@ -7,7 +7,10 @@ import numpy as np
 
 
 tokenizer = RobertaTokenizerFast.from_pretrained("./tokenizer", max_len=512)
-data_fold_nr = '4'
+data_fold_nr = 'f1'
+data_name = '21_length'
+
+eval_data_name = 'PRoBERTa'
 
 
 train_sequences = []
@@ -18,7 +21,7 @@ test_sequences = []
 test_labels = []
 
 # open file in read mode
-with open('./data/variable_length_proberta/f'+data_fold_nr+'/trn_prepared_shuffled.csv', 'r') as read_obj:
+with open('./data/'+data_name+'/'+data_fold_nr+'/trn_prepared_shuffled.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     for row in csv_reader:
         if ('0' in row[1]):
@@ -27,7 +30,7 @@ with open('./data/variable_length_proberta/f'+data_fold_nr+'/trn_prepared_shuffl
             train_labels.append(1)
         train_sequences.append(row[0])
 
-with open('./data/variable_length_proberta/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
+with open('./data/'+data_name+'/'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     for row in csv_reader:
         if ('0' in row[1]):
@@ -36,7 +39,7 @@ with open('./data/variable_length_proberta/f'+data_fold_nr+'/val_prepared_shuffl
             eval_labels.append(1)
         eval_sequences.append(row[0])
 
-with open('./data/variable_length_proberta/f'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
+with open('./data/'+data_name+'/'+data_fold_nr+'/val_prepared_shuffled.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     for row in csv_reader:
         if ('0' in row[1]):
@@ -82,17 +85,17 @@ model = RobertaForSequenceClassification(config=config)
 
 
 training_args = TrainingArguments(
-    output_dir="./Am-RoBERTa/m_f"+data_fold_nr,
+    output_dir="./Am-RoBERTa/"+data_name+"_m_"+data_fold_nr,
     overwrite_output_dir=True,
-    num_train_epochs=2,
+    num_train_epochs=1,
     per_device_train_batch_size=32,
     per_device_eval_batch_size=32,
-    save_strategy='epoch',
+    save_strategy='no',
     #logging_strategy="epoch",
-    logging_steps=100,
+    logging_steps=10,
     logging_first_step=True,
     evaluation_strategy="steps",
-    eval_steps=100
+    eval_steps=10
 )
 
 
@@ -121,17 +124,5 @@ trainer = Trainer(
 )
 
 trainer.train()
-trainer.save_model("./Am-RoBERTa/m_f"+data_fold_nr)
+trainer.save_model("./Am-RoBERTa/"+data_name+"_m_"+data_fold_nr+"(final)")
 
-model = RobertaForSequenceClassification.from_pretrained(
-    './Am-RoBERTa/m_f'+data_fold_nr)
-print(model.config)
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
-    compute_metrics=compute_metrics
-)
-
-print(trainer.evaluate(eval_dataset))

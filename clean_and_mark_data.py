@@ -1,6 +1,6 @@
 import pandas as pd
 
-data_fold = 'variable_length_pdbfull/f6'
+data_fold = 'NLReff_for_PRoBERTa/Fungal'
 
 
 def clean_and_mark(data_id, data_type, data_fold):
@@ -33,9 +33,9 @@ def clean_and_mark(data_id, data_type, data_fold):
     print('Finished\n--------------------')
 
 
-clean_and_mark('neg', 'trn', data_fold)
-clean_and_mark('neg', 'val', data_fold)
+#clean_and_mark('neg', 'trn', data_fold)
+#clean_and_mark('neg', 'val', data_fold)
 #clean_and_mark('neg', 'tst', data_fold)
 #clean_and_mark('bass', 'trn', data_fold)
 #clean_and_mark('bass', 'val', data_fold)
-#clean_and_mark('hets', 'tst', data_fold)
+clean_and_mark('fungal', 'tst', data_fold)

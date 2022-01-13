@@ -3,11 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 plt.close("all")
 
-data_type = "len_var"
 
 def plot_metric(metric, axs, a_x, a_y):
-    path = "plots/"+data_type+"_"+metric+".csv"
-    path_robust = "plots/"+data_type+"_"+metric+"_robust.csv"
+    path = "plots/"+metric+".csv"
+    path_robust = "plots/"+metric+"_robust.csv"
 
     df = pd.read_csv(path)
 
@@ -28,20 +27,24 @@ def plot_metric(metric, axs, a_x, a_y):
     axs[a_x,a_y].plot(x, y_max, color = 'blue', linewidth = 0.3)
     axs[a_x,a_y].grid(True)
     
+    
     if metric=="f1":
-        axs[a_x,a_y].set_title('f1 score')
+        axs[a_x,a_y].set_title('F1 score')
+        axs[a_x,a_y].set_yticks(np.arange(0,1.2,0.2))
     if metric=="precision":
-        axs[a_x,a_y].set_title(metric)
+        axs[a_x,a_y].set_title("Precision")
+        axs[a_x,a_y].set_yticks(np.arange(0,1.2,0.2))
     if metric=="recall":
-        axs[a_x,a_y].set_title(metric)
+        axs[a_x,a_y].set_title("Recall")
+        axs[a_x,a_y].set_yticks(np.arange(0,1.2,0.2))
     if metric=="accuracy":
-        axs[a_x,a_y].set_title(metric)
+        axs[a_x,a_y].set_title("Accuracy")
     if metric=="fpr":
         axs[a_x,a_y].set_yscale('log')
-        axs[a_x,a_y].set_title('false positive rate (log scale)')
+        axs[a_x,a_y].set_title('False positive rate (log scale)')
 
-fig, axs = plt.subplots(3, 2, sharex = False,sharey=False)
-fig.suptitle('Metrics')
+fig, axs = plt.subplots(3, 2, constrained_layout=True)
+fig.suptitle('PDB_len21')
 fig.tight_layout()
 plot_metric("accuracy", axs, 0, 0)
 plot_metric("f1", axs, 0,1)
@@ -49,4 +52,10 @@ plot_metric("fpr", axs,1,0)
 plot_metric("precision", axs,1,1)
 plot_metric("recall", axs,2,0)
 fig.delaxes(axs[2][1])
+plt.subplots_adjust(left=0.1,
+                    bottom=0.1, 
+                    right=0.9, 
+                    top=0.9, 
+                    wspace=0.3, 
+                    hspace=0.7)
 plt.show()

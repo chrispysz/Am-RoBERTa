@@ -8,14 +8,14 @@ import tensorflow as tf
 def run(data_fold_nr, data_name, eval_data_name):
     tokenizer = RobertaTokenizerFast.from_pretrained("./tokenizer", max_len=512)
 
-    bonus_target_name='NLRside'
+    bonus_target_name='Fungal'
     seq_cutoff=39
 
     test_sequences = []
     test_labels = []
 
     #with open('./data/'+data_name+'/'+bonus_target_name+'/tst_prepared_shuffled.csv', 'r') as read_obj:
-    with open('./data/'+data_name+'/'+bonus_target_name+'/nlrside_tst_prepared.csv', 'r') as read_obj:
+    with open('./data/'+data_name+'/'+bonus_target_name+'/fungal_tst_prepared.csv', 'r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             if ('0' in row[1]):
